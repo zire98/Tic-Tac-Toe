@@ -1,0 +1,137 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+}
+
+header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(0, 171, 171);
+    padding: 1rem;
+}
+
+.link-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+}
+
+.link-profile img {
+    border-radius: 50%;
+}
+
+.newGame-container {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.new-game {
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.new-game:hover {
+    background-color: grey;
+    cursor: pointer;
+}
+
+main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas:
+        "zzero one two"
+        "three four five"
+        "six seven eight";
+    width: 70%;
+    align-self: center;
+}
+
+.board div {
+    padding: 3rem;
+}
+
+.zero {
+    grid-area: zzero;
+    border-style: solid;
+    border-color: transparent black black transparent;
+}
+
+.one {
+    grid-area: one;
+    border-style: solid;
+    border-color: transparent black black transparent;
+}
+
+.two {
+    grid-area: two;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.three {
+    grid-area: three;
+    border-style: solid;
+    border-color: transparent black black transparent;
+}
+
+.four {
+    grid-area: four;
+    border-style: solid;
+    border-color: transparent black black transparent;
+}
+
+.five {
+    grid-area: five;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.six {
+    grid-area: six;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+
+.seven {
+    grid-area: seven;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+
+.eight {
+    grid-area: eight;
+}
+
+footer {
+    grid-area: footer;
+    background-color: black;
+    color: aliceblue;
+    text-align: center;
+    padding: 1rem;
+}
