@@ -35,4 +35,19 @@ const Game = (() => {
     let over = false;
     let winner = null;
     let winningLine = null;
+
+    // Evalúa el tablero y devuelve info de estado
+    const evaluate = (board) => {
+        for (const line of WIN_LINES) {
+            const [a, b, c] = line;
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return { status: 'win', mark: board[a], line };
+            }
+        }
+        if (board.every(cell => cell !== null)) {
+            return { status: 'tie' };
+        }
+        return { status: 'continue' };
+    };
+
 })();
