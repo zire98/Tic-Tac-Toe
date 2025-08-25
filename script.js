@@ -65,4 +65,31 @@ const Game = (() => {
     };
 
     const getCurrentPlayer = () => players[current];
+
+    const playTurn = (index) => {
+        if (over) return { ok: false, reason: 'game-over', ...getState() };
+
+        const mark = getCurrentPlayer().mark;
+        const placed = GameBoard.placeMark(index, mark);
+        if (!placed) return { ok: false, reason: 'invalid-move', ...getState() };
+
+        const board = GameBoard.getBoard();
+        const evalResult = evaluate(board);
+
+        if (evalResult.status === 'win') {
+            over = true;
+            winner = getCurrentPlayer();
+            winningLine = evalResult.line;
+            return { ok: true, status: 'win', ...getState() };
+        }
+
+        if (evalResult.status === 'tie') {
+            over = true;
+            return { ok: true, status: 'tie', ...getState() };
+        }
+
+        // Continua la partida
+        current = 1 - current;
+        return { ok: true, status: 'continue', ...getState() };
+    };
 })();
