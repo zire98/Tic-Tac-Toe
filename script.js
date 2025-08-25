@@ -50,4 +50,19 @@ const Game = (() => {
         return { status: 'continue' };
     };
 
+    const start = (name1 = 'Player 1', name2 = 'Player 2') => {
+        GameBoard.reset();
+        // Reutilizamos tu Player. Añadimos 'mark' como propiedad ad-hoc.
+        players = [
+            { ...Player(name1, 0), mark: 'X' },
+            { ...Player(name2, 0), mark: 'O' }
+        ];
+        current = 0;
+        over = false;
+        winner = null;
+        winningLine = null;
+        return getState();
+    };
+
+    const getCurrentPlayer = () => players[current];
 })();
