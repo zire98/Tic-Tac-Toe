@@ -92,4 +92,26 @@ const Game = (() => {
         current = 1 - current;
         return { ok: true, status: 'continue', ...getState() };
     };
+
+    const getState = () => ({
+        board: GameBoard.getBoard(),
+        currentPlayer: getCurrentPlayer(),
+        over,
+        winner,
+        winningLine
+    });
+
+    // Helper para depurar por consola (puro azúcar)
+    const printBoard = () => {
+        const b = GameBoard.getBoard().map(c => c ?? ' ');
+        console.log(
+            `${b[0]} | ${b[1]} | ${b[2]}\n` +
+            `---------\n` +
+            `${b[3]} | ${b[4]} | ${b[5]}\n` +
+            `---------\n` +
+            `${b[6]} | ${b[7]} | ${b[8]}`
+        );
+    };
+
+    return { start, playTurn, getState, printBoard };
 })();
