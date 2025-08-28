@@ -22,21 +22,19 @@ const GameBoard = (() => {
     return { getBoard, reset, placeMark };
 })();
 
-// IIFE
 const Game = (() => {
     const WIN_LINES = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // filas
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columnas
-        [0, 4, 8], [2, 4, 6]          // diagonales
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
     ];
 
     let players = [];
-    let current = 0;           // índice del jugador actual
+    let current = 0;
     let over = false;
     let winner = null;
     let winningLine = null;
 
-    // Evalúa el tablero y devuelve info de estado
     const evaluate = (board) => {
         for (const line of WIN_LINES) {
             const [a, b, c] = line;
@@ -52,7 +50,6 @@ const Game = (() => {
 
     const start = (name1 = 'Player 1', name2 = 'Player 2') => {
         GameBoard.reset();
-        // Reutilizamos tu Player. Añadimos 'mark' como propiedad ad-hoc.
         players = [
             { ...Player(name1, 0), mark: 'X' },
             { ...Player(name2, 0), mark: 'O' }
@@ -88,7 +85,6 @@ const Game = (() => {
             return { ok: true, status: 'tie', ...getState() };
         }
 
-        // Continua la partida
         current = 1 - current;
         return { ok: true, status: 'continue', ...getState() };
     };
@@ -101,7 +97,6 @@ const Game = (() => {
         winningLine
     });
 
-    // Helper para depurar por consola (puro azúcar)
     const printBoard = () => {
         const b = GameBoard.getBoard().map(c => c ?? ' ');
         console.log(
@@ -115,3 +110,87 @@ const Game = (() => {
 
     return { start, playTurn, getState, printBoard };
 })();
+
+const DisplayController = (() => {
+    const input1 = document.querySelector('#player-name1');
+    const input2 = document.querySelector('#player-name2');
+    const newGameBtn = document.querySelector('#new-game');
+    const cellsNodeList = document.querySelectorAll('.cell');
+
+    const cells = Array.from(cellsNodeList);
+
+    const statusEl = document.createElement('p');
+    statusEl.className = 'status';
+    const form = document.querySelector('.newGame-form');
+    if (form && form.parentNode) {
+        form.parentNode.insertBefore(statusEl, form.nextSibling);
+    } else {
+        const board = document.querySelector('.board');
+        board?.parentNode?.insertBefore(statusEl, board);
+    }
+
+    const clearWinStyles = () => {
+        cells.forEach(btn => btn.classList.remove('win'));
+    };
+
+    const setStatus = (text) => {
+        statusEl.textContent = text;
+    };
+
+    const setCellsEnabled = (enabled) => {
+        cells.forEach(btn => {
+            btn.disabled = !enabled;
+        });
+    };
+
+    const render = (state) => {
+        clearWinStyles();
+
+        state.board.forEach((val, idx) => {
+            cells[idx].textContent = val ?? '';
+            cells[idx].disabled = val !== null || state.over === true;
+        });
+
+        if (!state.over) {
+            const name = state.currentPlayer.getName
+                ? state.currentPlayer.getName()
+                : 'Player';
+            setStatus(`Turno: ${name} (${state.currentPlayer.mark})`);
+        } else {
+            if (state.winner) {
+                const wName = state.winner.getName ? state.winner.getName() : 'Player';
+                setStatus(`¡Ganó ${wName} (${state.winner.mark})!`);
+                if (Array.isArray(state.winningLine)) {
+                    state.winningLine.forEach(i => cells[i].classList.add('win'));
+                }
+            } else {
+                setStatus('¡Empate!');
+            }
+            setCellsEnabled(false);
+        }
+    };
+
+    cells.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            const res = Game.playTurn(index);
+            if (!res.ok && res.reason === 'invalid-move') {
+            }
+            render(Game.getState());
+        });
+    });
+
+    newGameBtn.addEventListener('click', () => {
+        const name1 = (input1.value || '').trim() || 'Player 1';
+        const name2 = (input2.value || '').trim() || 'Player 2';
+        Game.start(name1, name2);
+        setCellsEnabled(true);
+        render(Game.getState());
+    });
+
+    Game.start('Player 1', 'Player 2');
+    setCellsEnabled(true);
+    render(Game.getState());
+
+    return { render };
+})();
+
