@@ -186,5 +186,12 @@ const DisplayController = (() => {
         setCellsEnabled(true);
         render(Game.getState());
     });
+
+    Game.start('Player 1', 'Player 2');
+    setCellsEnabled(true);
+    render(Game.getState());
+
+
+    return { render };
 })();
 
