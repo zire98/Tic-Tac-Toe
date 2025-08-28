@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="./style.css">
-    <script src="./script.js"></script>
+    <script src="./script.js" defer></script>
 </head>
 
 <body>
@@ -19,8 +19,15 @@
         </a>
     </header>
     <main>
-        <div class="newGame-container">
-            <button class="new-game" type="button">New Game</button>
+        <div>
+            <form class="newGame-form" action="#">
+                <label for="player-name1">Player name 1</label>
+                <input type="text" class="player-name" id="player-name1">
+                <label for="player-name2">Player name 2</label>
+                <input type="text" class="player-name" id="player-name2">
+                <button class="new-game" id="new-game" type="button">New Game</button>
+            </form>
+
         </div>
         <div class="board">
             <button class="cell"></button>
