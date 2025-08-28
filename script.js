@@ -170,5 +170,21 @@ const DisplayController = (() => {
         }
     };
 
+    cells.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            const res = Game.playTurn(index);
+            if (!res.ok && res.reason === 'invalid-move') {
+            }
+            render(Game.getState());
+        });
+    });
+
+    newGameBtn.addEventListener('click', () => {
+        const name1 = (input1.value || '').trim() || 'Player 1';
+        const name2 = (input2.value || '').trim() || 'Player 2';
+        Game.start(name1, name2);
+        setCellsEnabled(true);
+        render(Game.getState());
+    });
 })();
 
